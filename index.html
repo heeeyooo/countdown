@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <title>Countdown</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100dvh;
+            margin: 0;
+            font-family: "Comfortaa", sans-serif;
+            color: white;
+        }
+
+        .body--birthday {
+            background-image: url(./img/birthday.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            color: black;
+        }
+
+        .body--new-year {
+            background-image: url(./img/new-year.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .title {
+            position: fixed;
+            top: 150px;
+            font-size: clamp(28px, 5vw, 70px);
+        }
+
+        #mode {
+            position: fixed;
+            top: 100px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            align-items: start;
+        }
+
+
+        .digit {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            width: clamp(30px, 6vw, 50px);
+            padding: 25px 25px 15px;
+            margin: 2px;
+            font-size: clamp(30px, 6vw, 72px);
+            font-weight: 700;
+            border-radius: 5px;
+            font-family: "Comfortaa", sans-serif;
+        }
+
+        .colon {
+            font-family: "Comfortaa", sans-serif;
+            font-size: clamp(30px, 6vw, 72px);
+            margin-top: 10px;
+        }
+
+        #day,
+        #hour,
+        #minute,
+        #second {
+            display: flex;
+        }
+
+        .date-title {
+            font-family: "Comfortaa", sans-serif;
+            padding-left: 5px;
+        }
+
+
+        .set-date-container {
+            position: fixed;
+            bottom: 100px;
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transform: translateY(200px);
+            transition: all 0.5s;
+        }
+
+        .set-date-container--active {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+
+        label {
+            font-family: "Comfortaa", sans-serif;
+            font-size: 12px;
+        }
+
+        .set-date-container div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            width: 40px;
+            padding: 5px 5px;
+            font-family: "Comfortaa", sans-serif;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input.set-month {
+            width: 80px;
+        }
+
+        .settings-btn {
+            position: fixed;
+            bottom: 50px;
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+        }
+
+
+        @media screen and (width < 1000px) {
+            .digit {
+                padding: 12px 5px 10px;
+            }
+
+        }
+
+        @media screen and (width < 600px) {
+            .digit {
+                padding: 10px 2px 5px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title" contenteditable="true">New Year Countdown</div>
+    <select name="" id="mode">
+        <option value="1">Black</option>
+        <option value="2">Birthday</option>
+        <option value="3">New Year</option>
+    </select>
+    <div class="countdown">
+        <div>
+            <span id="day">00</span>
+            <span class="date-title">day</span>
+        </div>
+
+        <span class="colon">:</span>
+        <div>
+            <span id="hour">00</span>
+            <span class="date-title">hour</span>
+        </div>
+        <span class="colon">:</span>
+        <div>
+            <span id="minute">00</span>
+            <span class="date-title">minute</span>
+
+        </div>
+        <span class="colon">:</span>
+        <div>
+            <span id="second">00</span>
+
+            <span class="date-title">second</span>
+        </div>
+    </div>
+    <div class="set-date-container">
+        <div>
+            <label for="set-day">Day:</label>
+            <input id="set-day" type="text" value="1">
+        </div>
+
+        <div>
+            <label for="set-month">Month:</label>
+            <input class="set-month" id="set-month" type="text" value="January">
+        </div>
+        <div>
+            <label for="set-year">Year:</label>
+            <input id="set-year" type="text" value="2025">
+        </div>
+
+
+        <div>
+            <label for="set-hour">Hour:</label>
+            <input id="set-hour" type="text" value="00">
+        </div>
+        <div>
+            <label for="set-minute">Minute:</label>
+            <input id="set-minute" type="text" value="00">
+        </div>
+
+
+        <div>
+            <label for="set-second">Second:</label>
+            <input id="set-second" type="text" value="00">
+        </div>
+
+    </div>
+    <button class="settings-btn" onclick="revealSettings()">Show settings</button>
+
+
+    <script>
+
+
+
+
+        const currentYear = new Date().getFullYear()
+
+        const day = document.querySelector('#day');
+        const val = day.textContent
+        const chars = val.split('')
+        day.innerHTML = chars.map(c => `<span class="digit">${c}</span>`).join('')
+
+        const hour = document.getElementById('hour')
+        const minute = document.getElementById('minute')
+        const second = document.getElementById('second')
+
+
+        const updateCountdown = () => {
+
+            switch (document.querySelector('#mode').value) {
+                case '1':
+                    document.body.classList.remove('body--birthday')
+                    document.body.classList.remove('body--new-year')
+                    document.querySelectorAll('input').forEach(el => el.style.color = 'white')
+                    document.querySelector('#mode').style.color = 'white'
+                    document.querySelector('.settings-btn').style.color = 'white'
+                    break
+                case '2':
+                    document.body.classList.add('body--birthday')
+                    document.body.classList.remove('body--new-year')
+                    document.querySelectorAll('input').forEach(el => el.style.color = 'black')
+                    document.querySelector('#mode').style.color = 'black'
+                    document.querySelector('.settings-btn').style.color = 'black'
+                    break
+                case '3':
+                    document.body.classList.remove('body--birthday')
+                    document.body.classList.add('body--new-year')
+                    document.querySelectorAll('input').forEach(el => el.style.color = 'white')
+                    document.querySelector('#mode').style.color = 'white'
+                    document.querySelector('.settings-btn').style.color = 'white'
+
+            }
+
+
+            const choseYear = document.querySelector('#set-year').value
+            const choseMonth = document.querySelector('#set-month').value
+            const choseDay = document.querySelector('#set-day').value
+            const choseHour = document.querySelector('#set-hour').value
+            const choseMinute = document.querySelector('#set-minute').value
+            const choseSecond = document.querySelector('#set-second').value
+
+            const futureTime = new Date(`${choseMonth} ${choseDay} ${choseYear} ${choseHour}:${choseMinute}:${choseSecond}`)
+            const currentTime = new Date()
+            const diffTime = (futureTime - currentTime)
+            const daysLeft = Math.floor(diffTime / 1000 / 60 / 60 / 24);
+            const hoursLeft = Math.floor((diffTime / 1000 / 60 / 60) % 24);
+            const minutesLeft = Math.floor((diffTime / 1000 / 60) % 60);
+            const secondsLeft = Math.floor((diffTime / 1000) % 60);
+            day.innerText = daysLeft
+            // 
+            const val = day.textContent
+            const chars = val.split('')
+            day.innerHTML = chars.map(c => `<span class="digit">${c}</span>`).join('')
+            // 
+            hour.innerText = hoursLeft < 10 ? '0' + hoursLeft : hoursLeft
+            // 
+            const val1 = hour.textContent
+            const chars1 = val1.split('')
+            hour.innerHTML = chars1.map(c => `<span class="digit">${c}</span>`).join('')
+            // 
+            minute.innerText = minutesLeft < 10 ? '0' + minutesLeft : minutesLeft
+            // 
+            const val2 = minute.textContent
+            const chars2 = val2.split('')
+            minute.innerHTML = chars2.map(c => `<span class="digit">${c}</span>`).join('')
+            // 
+            second.innerText = secondsLeft < 10 ? '0' + secondsLeft : secondsLeft
+            const val3 = second.textContent
+            const chars3 = val3.split('')
+            second.innerHTML = chars3.map(c => `<span class="digit">${c}</span>`).join('')
+            day.innerText === '0' && hour.innerText === '00' && minute.innerText === '00' && second.innerText === '00'
+                ? clearInterval(lele) : true
+
+        }
+
+        updateCountdown()
+
+        const lele = setInterval(updateCountdown, 1000)
+
+        function revealSettings() {
+            if (document.querySelector('.settings-btn').textContent === 'Show settings') {
+                document.querySelector('.settings-btn').textContent = 'Hide settings'
+                document.querySelector('.set-date-container').classList.add('set-date-container--active')
+
+            } else {
+                document.querySelector('.settings-btn').textContent = 'Show settings'
+                document.querySelector('.set-date-container').classList.remove('set-date-container--active')
+            }
+        }
+
+    </script>
+</body>
+
+</html>
